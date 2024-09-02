@@ -13,5 +13,6 @@ Thumbs.db
 # Ignore logs (if any are generated)
 *.log
 
+
 # Ignore IDE/editor specific files
 .idea/
