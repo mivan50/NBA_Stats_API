@@ -46,14 +46,14 @@ def get_player_career_stats(first_name, last_name):
     tbody = table.find('tbody')
     rows = tbody.find_all('tr')
 
-    headers = [th.getText() for th in table.find('thead').find_all('th')][:30]
+    headers = [th.getText() for th in table.find('thead').find_all('th')][:len(table.find('thead').find_all('th'))-1]
 
     data = []
     for row in rows:
-        cells = row.find_all('td')
-        season_year = row.find('th').getText()
-        cell_data = [season_year] + [cell.getText() for cell in cells][:29]
-        data.append(cell_data)
+        cells = row.find_all(['th', 'td'])
+        if len(cells) - 1 == len(headers):
+            cell_data = [cell.getText() for cell in cells][:len(cells) - 1]
+            data.append(cell_data)
 
     df = pd.DataFrame(data, columns=headers)
 
@@ -118,5 +118,3 @@ def get_career_leaders(p_r_a, rs_or_p):
     df = pd.DataFrame(data, columns=headers)
 
     return df.to_dict(orient='records')
-
-
