@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from season_scraper import get_player_season_stats, get_player_career_stats
+from season_scraper import *
 
 app = Flask(__name__)
 
@@ -19,6 +19,26 @@ def get_career_stats(first_name, last_name):
     try:
         # Call the function to fetch career stats
         data = get_player_career_stats(first_name, last_name)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/player/<pra>/<rs_p>/leaders/career', methods=['GET'])
+def get_career_pra_leaders(pra, rs_p):
+    try:
+        # Call the function to fetch career stats
+        data = get_career_leaders(pra, rs_p)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/player/<pra>/<rs_p>/leaders/season', methods=['GET'])
+def get_season_pra_leaders(pra, rs_p):
+    try:
+        # Call the function to fetch career stats
+        data = get_season_leaders(pra, rs_p)
         return jsonify(data)
     except Exception as e:
         return jsonify({'error': str(e)}), 500

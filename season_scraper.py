@@ -58,3 +58,65 @@ def get_player_career_stats(first_name, last_name):
     df = pd.DataFrame(data, columns=headers)
 
     return df.to_dict(orient='records')
+
+
+def get_season_leaders(p_r_a, rs_or_p):
+
+    if rs_or_p == "playoffs":
+        url = f'https://www.basketball-reference.com/leaders/{p_r_a}_per_g_season_p.html'
+    else:
+        url = f'https://www.basketball-reference.com/leaders/{p_r_a}_per_g_season.html'
+
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    table = soup.find('table', {'id': 'stats_NBA'})
+    tbody = table.find('tbody')
+    rows = tbody.find_all('tr')
+
+    headers = [th.getText() for th in table.find('thead').find_all('th')][1:]
+
+    data = []
+    for row in rows:
+        cells = row.find_all('td')
+        row_data = [cell.getText() for cell in cells][1:]
+        # Remove trailing '*' from names
+        if row_data:
+            row_data = [item.rstrip('*') for item in row_data]
+        data.append(row_data)
+
+    # Create DataFrame
+    df = pd.DataFrame(data, columns=headers)
+
+    return df.to_dict(orient='records')
+
+
+def get_career_leaders(p_r_a, rs_or_p):
+    if rs_or_p == "playoffs":
+        url = f'https://www.basketball-reference.com/leaders/{p_r_a}_per_g_career_p.html'
+    else:
+        url = f'https://www.basketball-reference.com/leaders/{p_r_a}_per_g_career.html'
+
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    table = soup.find('table', {'id': 'nba'})
+    rows = table.find_all('tr')
+
+    headers = [th.getText() for th in table.find('thead').find_all('th')][1:]
+
+    # Extract row data while ensuring only rows with the correct number of columns are processed
+    data = []
+    for row in rows:
+        cells = row.find_all('td')
+        if len(cells) - 1 == len(headers):
+            row_data = [cell.getText() for cell in cells][1:]
+            row_data[0] = row_data[0].strip().rstrip('*')
+            data.append(row_data)
+
+    # Create DataFrame
+    df = pd.DataFrame(data, columns=headers)
+
+    return df.to_dict(orient='records')
+
+
