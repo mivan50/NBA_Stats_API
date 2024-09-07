@@ -54,5 +54,15 @@ def get_team_roster(team, year):
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/NBA/<year>/draft', methods=['GET'])
+def get_nba_draft(year):
+    try:
+        # Call the function to fetch career stats
+        data = get_nba_draft_year(year)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)

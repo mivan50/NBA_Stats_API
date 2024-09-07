@@ -142,3 +142,30 @@ def get_team_roster_year(team, year):
     df['Birth'] = df['Birth'].str.strip().str[-2:]
 
     return df.to_dict(orient='records')
+
+
+def get_nba_draft_year(year):
+    url = f'https://www.basketball-reference.com/draft/NBA_{year}.html'
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    table = soup.find('table', {'id': 'stats'})
+    tbody = table.find('tbody')
+    rows = tbody.find_all('tr')
+
+    headers = [th.getText() for th in table.find('thead').find_all('tr')[1].find_all('th')][1:][:4]
+
+    data = []
+
+    for row in rows:
+        row_classes = row.get('class', [])
+        if 'over_header thead' in row_classes or 'thead' in row_classes:
+            continue
+
+        cells = row.find_all('td')
+        row_data = [cell.getText() for cell in cells][:4]
+        data.append(row_data)
+
+    df = pd.DataFrame(data, columns=headers)
+
+    return df.to_dict(orient='records')
