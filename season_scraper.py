@@ -118,3 +118,27 @@ def get_career_leaders(p_r_a, rs_or_p):
     df = pd.DataFrame(data, columns=headers)
 
     return df.to_dict(orient='records')
+
+
+def get_team_roster_year(team, year):
+    url = f'https://www.basketball-reference.com/teams/{team}/{year}.html'
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    table = soup.find('table', {'id': 'roster'})
+    tbody = table.find('tbody')
+    rows = tbody.find_all('tr')
+
+    headers = [th.getText() for th in table.find('thead').find_all('th')][1:]
+
+    data = []
+    for row in rows:
+        cells = row.find_all('td')
+        row_data = [cell.getText() for cell in cells]
+        data.append(row_data)
+
+    df = pd.DataFrame(data, columns=headers)
+    df['Player'] = df['Player'].str.replace(r'\s*\(TW\)', '', regex=True)
+    df['Birth'] = df['Birth'].str.strip().str[-2:]
+
+    return df.to_dict(orient='records')

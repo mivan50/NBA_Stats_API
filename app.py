@@ -24,7 +24,7 @@ def get_career_stats(first_name, last_name):
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/player/<pra>/<rs_p>/leaders/career', methods=['GET'])
+@app.route('/NBA/<pra>/<rs_p>/leaders/career', methods=['GET'])
 def get_career_pra_leaders(pra, rs_p):
     try:
         # Call the function to fetch career stats
@@ -34,11 +34,21 @@ def get_career_pra_leaders(pra, rs_p):
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/player/<pra>/<rs_p>/leaders/season', methods=['GET'])
+@app.route('/NBA/<pra>/<rs_p>/leaders/season', methods=['GET'])
 def get_season_pra_leaders(pra, rs_p):
     try:
         # Call the function to fetch career stats
         data = get_season_leaders(pra, rs_p)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/NBA/<team>/<year>/roster', methods=['GET'])
+def get_team_roster(team, year):
+    try:
+        # Call the function to fetch career stats
+        data = get_team_roster_year(team, year)
         return jsonify(data)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
