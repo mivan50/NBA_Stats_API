@@ -6,8 +6,6 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 limiter = Limiter(get_remote_address, app=app, default_limits=["10 per minute"])
 
-app = Flask(__name__)
-
 
 @app.route('/player/<first_name>/<last_name>/<year>/stats/season', methods=['GET'])
 def get_season_stats(first_name, last_name, year):
