@@ -10,7 +10,7 @@ This project provides a simple API for retrieving basketball statistics from [Ba
 - Limits the number of requests per user in a specified time period to prevent abuse and ensure fair access
 - Uses BeautifulSoup for scraping and parsing HTML data from Basketball Reference’s web pages
 
-## Libraries/Frameworks Used 
+## Libraries/Frameworks Used
 - Flask
 - pandas
 - beautifulsoup4
