@@ -50,7 +50,7 @@ def get_player_career_stats(first_name, last_name):
 
     soup = BeautifulSoup(page.content, 'html.parser')
 
-    table = soup.find('table', {'id': 'per_game'})
+    table = soup.find('table', {'id': 'per_game_stats'})
     if table is None:
         return None  # Table not found
 
